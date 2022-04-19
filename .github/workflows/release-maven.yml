@@ -75,8 +75,10 @@ jobs:
         with:
           images: ${{ env.CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}
           labels: |
+            com.indexdata.my-label=foo
             org.opencontainers.image.vendor=Index Data LLC
             org.opencontainers.image.documentation=https://github.com/indexdata/localindices/tree/master/doc
+            org.opencontainers.image.documentation=https://www.indexdata.com/index-datas-integrated-discovery-model/
       - name: Build and publish Docker image
         uses: docker/build-push-action@v2
         with:
