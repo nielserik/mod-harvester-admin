@@ -2,8 +2,9 @@ name: release-maven
 
 on:
   push:
-    tags:
-      - '[vV][0-9]+.[0-9]+.[0-9]+'  # i.e. release tag only
+    branches: [ DEVOPS-946-docker-labels ]
+#    tags:
+#      - '[vV][0-9]+.[0-9]+.[0-9]+'  # i.e. release tag only
 
 env:
   FOLIO_MD_REGISTRY: 'https://registry.folio-dev.indexdata.com'
@@ -80,25 +81,25 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          push: true
+          push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - name: Read ModuleDescriptor
-        id: moduleDescriptor
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ${{ env.MODULE_DESCRIPTOR }}
-      - name: Publish ModuleDescriptor to MD registry
-        id: result-md-registry
-        uses: indiesdev/curl@v1.1
-        with:
-          url: "${{ env.FOLIO_MD_REGISTRY }}/_/proxy/modules"
-          method: "POST"
-          accept: 201
-          headers: |
-            {
-              "content-type": "application/json",
-              "x-okapi-tenant": "${{ secrets.FOLIO_REGISTRY_TENANT }}",
-              "x-okapi-token": "${{ env.TOKEN_MD_REGISTRY }}"
-            }
-          body: ${{ steps.moduleDescriptor.outputs.content }}
+#      - name: Read ModuleDescriptor
+#        id: moduleDescriptor
+#        uses: juliangruber/read-file-action@v1
+#        with:
+#          path: ${{ env.MODULE_DESCRIPTOR }}
+#      - name: Publish ModuleDescriptor to MD registry
+#        id: result-md-registry
+#        uses: indiesdev/curl@v1.1
+#        with:
+#          url: "${{ env.FOLIO_MD_REGISTRY }}/_/proxy/modules"
+#          method: "POST"
+#          accept: 201
+#          headers: |
+#            {
+#              "content-type": "application/json",
+#              "x-okapi-tenant": "${{ secrets.FOLIO_REGISTRY_TENANT }}",
+#              "x-okapi-token": "${{ env.TOKEN_MD_REGISTRY }}"
+#            }
+#          body: ${{ steps.moduleDescriptor.outputs.content }}
